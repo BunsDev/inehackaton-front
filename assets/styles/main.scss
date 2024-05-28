@@ -1,0 +1,63 @@
+/*Variables
+--------------------------------------------------------------------------------------------------------------------- */
+@import "base.variables";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "globals";
+
+
+$brand-colors: (
+	"brand1": $brand1,
+	"brand2": $brand2,
+	"primary": $primary,
+	"secondary": $secondary
+);
+
+$theme-colors: map-merge($theme-colors, $brand-colors);
+
+@import "bootstrap/scss/bootstrap";
+
+/* Generals
+--------------------------------------------------------------------------------------------------------------------- */
+
+:root {
+
+	//font-size: 14px;
+}
+
+* {
+	position: relative;
+}
+
+html {
+
+	min-height: 100vh;
+}
+
+body {
+
+	min-height: 100vh;
+	font-family: Roboto, sans-serif;
+}
+
+#__nuxt {
+
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.fs-7 {
+
+	font-size: 0.875rem;
+}
+
+/* Dialog
+--------------------------------------------------------------------------------------------------------------------- */
+
+.dialog-close {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	z-index: 10;
+}
