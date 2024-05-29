@@ -1,5 +1,11 @@
 <template>
 	<div class="step3-wrapper">
+
+		<div class="vote-error" :class="{ 'voted': !!voteError }">
+			<icon name="material-symbols:error-rounded" />
+			<h4>Lo sentimos, este ciudadano ya está registrado con su voto.</h4>
+		</div>
+
 		<div class="voting-wrapper" :class="{ 'voted': !!voted }">
 			<div class="step-copy">
 				<h2>Paso 3</h2>
@@ -92,6 +98,7 @@
 	const voting = useVotingStore();
 	const router = useRouter();
 	const voted = ref(false);
+	const voteError = ref(false);
 
 	const mode = ref('federales');
 
@@ -109,14 +116,50 @@
 
 		// wait 5 seconds
 		await new Promise(resolve => setTimeout(resolve, 5000));
-		await voting.castVote();
-		await router.push('/thanks');
+		const voteRes = await voting.castVote();
+
+		if(!!voteRes) {
+			await router.push('/thanks');
+		} else {
+
+			voteError.value = true;
+		}
 	};
 
 </script>
 
 <!--suppress SassScssResolvedByNameOnly -->
 <style lang="sass" scoped>
+
+	.vote-error
+
+		max-width: 400px
+		width: 80%
+		left: 50%
+		top: 50%
+		transform: translate(-50%, -50%)
+		background: white
+		border: 1px solid var(--bs-danger)
+		height: 50dvh
+		z-index: 100
+		border-radius: 0.5rem
+		display: flex
+		flex-direction: column
+		justify-content: center
+		align-items: center
+		text-align: center
+		padding: 2rem
+		opacity: 0
+		transition: all 500ms ease
+		pointer-events: none
+
+		&.voted
+			opacity: 1
+			pointer-events: all
+
+		.icon
+			font-size: 100px
+			color: var(--bs-danger)
 
 	.already-voted
 		opacity: 0

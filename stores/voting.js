@@ -94,8 +94,14 @@ export const useVotingStore = defineStore('votingStore', () => {
 				},
 			});
 
-			voteInfo.value = data.value.data;
-			return data.value.data;
+			if (error.value) {
+				console.error(error);
+				return false;
+			} else {
+
+				voteInfo.value = data.value.data;
+				return data.value.data;
+			}
 		};
 
 		const mintVoteProof = async (addr) => {
