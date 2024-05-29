@@ -12,6 +12,7 @@
 			class="file-input"
 			v-bind="$attrs"
 			@change="onChange"
+			capture="user"
 		/>
 
 		<span v-if="label">
