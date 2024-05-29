@@ -1,7 +1,9 @@
 <template>
 	<div class="step2-wrapper">
 
-		<div class="file-uploader-wrapper" v-if="!voting.selfie">
+		<div class="file-uploader-wrapper" v-if="!voting.selfie || !voting.faceSimilarity || !voting.faceRecognition">
+
+			<img class="face-scan-animation" src="/images/face-scan.gif" alt="" :class="{ active: uploadLoading }">
 
 			<div class="step-copy">
 				<h2>Paso 2</h2>
@@ -40,14 +42,38 @@
 
 		<div class="selfie-uploaded" v-else>
 
-			<div class="selfie">
-				<img :src="voting.selfie" alt="">
-			</div>
+			<template v-if="voting.faceSimilarity.similarity < 85">
+				<div class="selfie">
+					<img :src="voting.selfie" alt="">
+				</div>
 
-			<p class="text-center">¡Gracias! Listo para votar</p>
-			<p class="text-center">
-				<nuxt-link to="/step3" class="btn rounded-pill btn-start w-100 btn-primary">¡A votar!</nuxt-link>
-			</p>
+				<div class="error-copy text-center">
+					<h4>Hay un problema con tu fotografía</h4>
+					<p>Parece que no pudimos identificar tu fotografía contra tu credencial de elector. Por favor intenta de nuevo.</p>
+				</div>
+
+				<p class="text-center">
+					<a
+						href="#"
+						@click.prevent="retry"
+						class="btn rounded-pill btn-start w-100 btn-primary"
+					>Intentar de nuevo</a>
+				</p>
+			</template>
+
+			<template v-else>
+				<div class="selfie">
+					<img :src="voting.selfie" alt="">
+				</div>
+				<div class="success-copy text-center">
+
+					<h4>Identidad confirmada</h4>
+					<p>¡Gracias! Listo para votar</p>
+				</div>
+				<p class="text-center">
+					<nuxt-link to="/step3" class="btn rounded-pill btn-start w-100 btn-primary">¡A votar!</nuxt-link>
+				</p>
+			</template>
 		</div>
 
 	</div>
@@ -89,7 +115,8 @@
 				});
 
 				if(faceRecognitionRes.data.value) {
-					console.log('faceRecognitionRes', faceRecognitionRes.data.value);
+					voting.faceSimilarity = faceRecognitionRes.data.value.data;
+					voting.faceRecognition = true;
 				}
 			}
 		}
@@ -97,10 +124,30 @@
 		uploadLoading.value = false;
 		fileUploadRef.value.resetFiles();
 	};
+
+	const retry = () => {
+		voting.selfie = null;
+		voting.faceRecognition = false;
+	};
 </script>
 
 <!--suppress SassScssResolvedByNameOnly -->
 <style lang="sass" scoped>
+
+	.face-scan-animation
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+		max-width: 80%
+		z-index: 100
+		opacity: 0
+		pointer-events: none
+		transition: all 250ms ease-in-out
+
+		&.active
+			opacity: 1
+			pointer-events: all
 
 	.selfie-uploaded
 		width: 100%

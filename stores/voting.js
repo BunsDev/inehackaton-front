@@ -24,6 +24,11 @@ export const useVotingStore = defineStore('votingStore', () => {
     const selfie = ref(null);
 
     const inStep = ref(0);
+	const faceRecognition = ref(false);
+	const faceSimilarity = ref({
+		matched: false,
+		similarity: 0,
+	});
 
 
     const castVote = async (candidate) => {
@@ -77,6 +82,10 @@ export const useVotingStore = defineStore('votingStore', () => {
         castVote,
         mintVoteProof,
         getCandidate,
+        candidates,
+        faceRecognition,
+        faceSimilarity,
+        
 
     };
 });
