@@ -1,74 +1,97 @@
 <template>
 	<div class="step3-wrapper">
-		<div class="step-copy">
-			<h2>Paso 3</h2>
-			<p>¡Llegó la hora de votar!</p>
-		</div>
+		<div class="voting-wrapper" :class="{ 'voted': !!voted }">
+			<div class="step-copy">
+				<h2>Paso 3</h2>
+				<p>¡Llegó la hora de votar!</p>
+			</div>
 
-		<div class="mb-3">
-			<p class="mb-1 text-center">Selecciona la elección que deseas hacer:</p>
-			<!-- pill tabs for "Estatales" and "Federales" -->
-			<div class="d-flex">
-				<div class="btn-group flex-grow-1" role="group" aria-label="Basic radio toggle button group">
-					<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-					<label class="btn btn-outline-primary" @click="mode = 'federales'" for="btnradio2">Federales</label>
-					<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
-					<label class="btn btn-outline-primary" @click="mode = 'estatales'" for="btnradio1">Estatales</label>
+			<div class="mb-3">
+				<p class="mb-1 text-center">Selecciona la elección que deseas hacer:</p>
+				<!-- pill tabs for "Estatales" and "Federales" -->
+				<div class="d-flex">
+					<div class="btn-group flex-grow-1" role="group">
+						<button
+							class="btn"
+							:class="{ 'btn-primary': mode === 'federales', 'btn-outline-primary': mode !== 'federales' }"
+							@click="mode = 'federales'"
+						>Federales
+						</button>
+						<button
+							class="btn"
+							:class="{ 'btn-primary': mode === 'estatales', 'btn-outline-primary': mode !== 'estatales' }"
+							@click="mode = 'estatales'"
+						>Estatales
+						</button>
+					</div>
 				</div>
 			</div>
+
+			<div class="parties mb-3">
+				<template v-if="mode === 'federales'">
+					<article
+						v-for="c in voting.candidates.federales"
+						class="party"
+						@click="setVote(c.slug, 'federales')"
+						:class="{ 'selected': voting.federalVote === c.slug }"
+					>
+						<img :src="`/images/${ c.partyImage }`" alt="">
+						<div class="party-info">
+							<h3>{{ c.party }}</h3>
+							<h4>{{ c.candidate }}</h4>
+							<p>{{ c.partyName }}</p>
+						</div>
+					</article>
+				</template>
+
+				<template v-if="mode === 'estatales'">
+					<article
+						v-for="c in voting.candidates.estatales"
+						class="party"
+						@click="setVote(c.slug, 'estatales')"
+						:class="{ 'selected': voting.stateVote === c.slug }"
+					>
+						<img :src="`/images/${ c.partyImage }`" alt="">
+						<div class="party-info">
+							<h3>{{ c.party }}</h3>
+							<h4>{{ c.candidate }}</h4>
+							<p>{{ c.partyName }}</p>
+						</div>
+					</article>
+				</template>
+			</div>
+
+			<template v-if="!!voting.federalVote && !!voting.stateVote">
+				<p class="text-center text-muted fs-7 mb-1">He seleccionado a mis candidato y quiero emitir mi voto</p>
+
+				<p class="text-center">
+					<nuxt-link
+						@click="castVote"
+						class="btn rounded-pill btn-start w-100 btn-primary"
+					>Emitir Voto
+					</nuxt-link>
+				</p>
+			</template>
 		</div>
 
-		<div class="parties mb-3">
-			<template v-if="mode === 'federales'">
-				<article
-					v-for="c in voting.candidates.federales"
-					class="party"
-					@click="setVote(c.slug, 'federales')"
-					:class="{ 'selected': voting.federalVote === c.slug }"
-				>
-					<img :src="`/images/${ c.partyImage }`" alt="">
-					<div class="party-info">
-						<h3>{{ c.party }}</h3>
-						<h4>{{ c.candidate }}</h4>
-						<p>{{ c.partyName }}</p>
-					</div>
-				</article>
-			</template>
+		<div class="already-voted" :class="{ 'voted': !!voted }">
+			<div class="selfie mb-2">
+				<img :src="voting.selfie" alt="">
+			</div>
 
-			<template v-if="mode === 'estatales'">
-				<article
-					v-for="c in voting.candidates.estatales"
-					class="party"
-					@click="setVote(c.slug, 'estatales')"
-					:class="{ 'selected': voting.stateVote === c.slug }"
-				>
-					<img :src="`/images/${ c.partyImage }`" alt="">
-					<div class="party-info">
-						<h3>{{ c.party }}</h3>
-						<h4>{{ c.candidate }}</h4>
-						<p>{{ c.partyName }}</p>
-					</div>
-				</article>
-			</template>
+			<div class="copy text-center">
+				<h3>¡Estás haciendo historia!</h3>
+				<p class="text-muted">Tu voto está siendo procesado</p>
+				<loader-quantum />
+			</div>
 		</div>
-
-		<template v-if="!!voting.federalVote && !!voting.stateVote">
-			<p class="text-center text-muted fs-7 mb-1">He seleccionado a mi candidato y quiero emitir mi voto</p>
-
-			<p class="text-center">
-				<nuxt-link
-					@click="castVote()"
-					class="btn rounded-pill btn-start w-100 btn-primary"
-				>Emitir Voto
-				</nuxt-link>
-			</p>
-		</template>
 	</div>
 </template>
 
 <script setup>
 	const voting = useVotingStore();
 	const router = useRouter();
+	const voted = ref(false);
 
 	const mode = ref('federales');
 
@@ -81,6 +104,11 @@
 	};
 
 	const castVote = async () => {
+
+		voted.value = true;
+
+		// wait 5 seconds
+		await new Promise(resolve => setTimeout(resolve, 5000));
 		await voting.castVote();
 		await router.push('/thanks');
 	};
@@ -90,8 +118,63 @@
 <!--suppress SassScssResolvedByNameOnly -->
 <style lang="sass" scoped>
 
+	.already-voted
+		opacity: 0
+		transition: all 500ms ease
+		pointer-events: none
+		overflow: clip
+		position: absolute
+		top: 0
+		left: 0
+		width: 100%
+		height: 100%
+		padding: 1rem
+		display: flex
+		flex-direction: column
+		justify-content: center
+		align-items: center
+
+		&.voted
+			opacity: 1
+			pointer-events: all
+
+			.selfie
+				margin-top: 0
+
+		.selfie
+			width: 150px
+			aspect-ratio: 1
+			border: 2px solid var(--bs-primary)
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+			border-radius: 50%
+			overflow: clip
+			transition: all 500ms ease
+			margin: 180px auto
+
+			img
+				object-fit: cover
+				width: 100%
+				aspect-ratio: 1
+
+	.voting-wrapper
+		transition: all 500ms ease
+		position: absolute
+		top: 0
+		left: 0
+		width: 100%
+		height: 100%
+		padding: 1rem
+
+		&.voted
+			opacity: 0
+			pointer-events: none
+
 	.step3-wrapper
 		width: 100%
+		position: absolute
+		height: 100%
+		top: 0
+		left: 0
 
 		.step-copy
 			text-align: center

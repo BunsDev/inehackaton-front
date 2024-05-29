@@ -75,12 +75,19 @@ export const useVotingStore = defineStore('votingStore', () => {
 			similarity: 0,
 		});
 
-		const castVote = async (candidate) => {
+		const castVote = async () => {
+
+			console.log(federalVote.value);
+
+			// get the candidate address based on the federalVote
+			const candidate = candidates.value.federales.find(c => c.slug === federalVote.value);
+
+			console.log(candidate);
 
 			const { data, error } = await useBaseFetch('/web3/vote', {
 				method: 'POST',
 				body: JSON.stringify({
-					candidate,
+					candidate: candidate.address,
 					idMex: idMex.value,
 				}),
 				headers: {
