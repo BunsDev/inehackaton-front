@@ -87,7 +87,7 @@ export const useVotingStore = defineStore('votingStore', () => {
 				method: 'POST',
 				body: JSON.stringify({
 					candidate: candidate.address,
-					idVote: idMex.value + uuidv4(),
+					idVote: idMex.value + '01'
 				}),
 				headers: {
 					'Content-Type': 'application/json',
