@@ -9,8 +9,8 @@ export default defineNuxtConfig({
 		head: {
 			title: 'INE - Hackaton 2024',
 			link: [
-				// favicon.ico
-				{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+				// favicon.png
+				{ rel: 'icon', type: 'image/png', href: '/favicon.png' },
 				// Roboto Slab
 				{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap' },
 				// Roboto

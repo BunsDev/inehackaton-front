@@ -1,7 +1,7 @@
 <template>
 	<div class="step1-wrapper">
 
-		<div class="file-uploader-wrapper" v-if="!voting.ine && true">
+		<div class="file-uploader-wrapper" v-if="!voting.ineBack || !voting.ineFront">
 
 			<platform-loading :active="uploadLoading" :is-full-page="false" />
 
@@ -38,14 +38,20 @@
 				<div class="col-6">
 					<div class="side-verification side-front" :class="{ 'ready': !!voting.ineFront }">
 						<icon v-if="voting.ineFront" name="material-symbols:check-small-rounded" />
-						<icon v-else name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting" />
+						<icon
+							v-else
+							name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting"
+						/>
 						Frente
 					</div>
 				</div>
 				<div class="col-6">
 					<div class="side-verification side-back" :class="{ 'ready': !!voting.ineBack }">
 						<icon v-if="voting.ineBack" name="material-symbols:check-small-rounded" />
-						<icon v-else name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting" />
+						<icon
+							v-else
+							name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting"
+						/>
 						Tras
 					</div>
 				</div>
@@ -61,10 +67,11 @@
 		<div class="ine-uploaded" v-else>
 
 			<div class="ine">
-
+				<img :src="voting.ineFront" alt="INE" />
 			</div>
 
-			<p class="text-center">Listo, tu INE ha sido cargada exitosamente</p>
+			<p class="text-center mb-1">Listo, tu INE ha sido cargada exitosamente</p>
+			<p class="text-center"><code>{{ voting.idMex }}</code></p>
 			<p class="text-center">
 				<nuxt-link to="/step2" class="btn rounded-pill btn-start w-100 btn-primary">Siguiente paso</nuxt-link>
 			</p>
@@ -99,23 +106,39 @@
 
 			if(data) {
 
-				const credentialPhoto = await useBaseFetch('/attachments/analyze', {
+				const credentialPhotoRes = await useBaseFetch('/attachments/analyze', {
 					method: 'POST',
 					body: JSON.stringify({ url: data.value.data }),
 				});
 
-				if(credentialPhoto.data.value) {
+				if(credentialPhotoRes.data.value) {
 
 					// check it includes ine_front
-					if(credentialPhoto.data.value.data.documentType.includes('ine_front')) {
+					if(credentialPhotoRes.data.value.data.documentType.includes('ine_front')) {
+
+						const credentialPhotoRes = await useBaseFetch('/attachments/credential-photo', {
+							method: 'POST',
+							body: JSON.stringify({ url: data.value.data }),
+						});
+
+						voting.photo = credentialPhotoRes.data.value.data;
 						voting.ineFront = data.value.data;
 					}
 
-					if (credentialPhoto.data.value.data.documentType === 'ine_back') {
+					if(credentialPhotoRes.data.value.data.documentType === 'ine_back') {
+
+						// perform the ocr to find the idmex
+						const ocrRes = await useBaseFetch('/attachments/ocr', {
+							method: 'POST',
+							body: JSON.stringify({ url: data.value.data }),
+						});
+
+						console.log('ocrRes', ocrRes.data.value.data);
+						voting.idMex = ocrRes.data.value.data;
 						voting.ineBack = data.value.data;
 					}
 
-					console.log('credentialPhoto', credentialPhoto.data.value.data.documentType);
+					console.log('credentialPhotoRes', credentialPhotoRes.data.value.data.documentType);
 				}
 			}
 		}
@@ -155,6 +178,12 @@
 			background: var(--bs-gray-300)
 			border-radius: 1rem
 			margin-bottom: 1rem
+			padding: 1rem
+
+			img
+				width: 100%
+				aspect-ratio: 16/9
+				object-fit: contain
 
 	.btn-suggestions
 		border-color: var(--bs-border-color)

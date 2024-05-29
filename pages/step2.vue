@@ -1,7 +1,7 @@
 <template>
 	<div class="step2-wrapper">
 
-		<div class="file-uploader-wrapper" v-if="!voting.ine && true">
+		<div class="file-uploader-wrapper" v-if="!voting.selfie">
 
 			<div class="step-copy">
 				<h2>Paso 2</h2>
@@ -38,15 +38,15 @@
 			</p>
 		</div>
 
-		<div class="ine-uploaded" v-else>
+		<div class="selfie-uploaded" v-else>
 
-			<div class="ine">
-
+			<div class="selfie">
+				<img :src="voting.selfie" alt="">
 			</div>
 
-			<p class="text-center">Listo, tu INE ha sido cargada exitosamente</p>
+			<p class="text-center">¡Gracias! Listo para votar</p>
 			<p class="text-center">
-				<nuxt-link to="/step2" class="btn rounded-pill btn-start w-100 btn-primary">Siguiente paso</nuxt-link>
+				<nuxt-link to="/step3" class="btn rounded-pill btn-start w-100 btn-primary">¡A votar!</nuxt-link>
 			</p>
 		</div>
 
@@ -75,21 +75,21 @@
 			const { data, error } = await useBaseFetch('/upload', {
 				method: 'POST',
 				body: formData,
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
 			});
 
 			if(data) {
-				voting.ine = data.value.data.attachment;
+				voting.selfie = data.value.data;
 
-				const credentialPhoto = await useBaseFetch('/attachments/credential-photo', {
+				const faceRecognitionRes = await useBaseFetch('/attachments/compare-faces', {
 					method: 'POST',
-					body: JSON.stringify(data.value.data.attachment),
+					body: JSON.stringify({
+						url1: voting.ineFront,
+						url2: voting.selfie,
+					}),
 				});
 
-				if(credentialPhoto.data.value) {
-					voting.photo.value = credentialPhoto.data.value.data.attachment;
+				if(faceRecognitionRes.data.value) {
+					console.log('faceRecognitionRes', faceRecognitionRes.data.value);
 				}
 			}
 		}
@@ -102,14 +102,20 @@
 <!--suppress SassScssResolvedByNameOnly -->
 <style lang="sass" scoped>
 
-	.ine-uploaded
+	.selfie-uploaded
 		width: 100%
 
-		.ine
-			aspect-ratio: 16/9
-			background: var(--bs-gray-300)
-			border-radius: 1rem
+		.selfie
+			text-align: center
 			margin-bottom: 1rem
+
+			img
+				width: 150px
+				aspect-ratio: 1
+				border-radius: 50%
+				object-fit: cover
+				border: 2px solid white
+				box-shadow: 0 0 10px rgba(black, 0.5)
 
 	.btn-suggestions
 		border-color: var(--bs-border-color)

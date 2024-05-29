@@ -38,7 +38,9 @@
 	</div>
 
 	<div class="content-wrapper">
-		<nuxt-page />
+		<div class="scroll-wrapper">
+			<nuxt-page />
+		</div>
 	</div>
 
 	<footer class="app-footer">
@@ -105,7 +107,7 @@
 			box-shadow: 0 0 20px rgba(0, 0, 0, 0.25)
 
 			.logo
-				max-width: 150px
+				max-width: 100px
 
 		.welcome-copy
 			background: url('/images/background.jpg') no-repeat center center
@@ -119,14 +121,14 @@
 			max-width: 80%
 			display: flex
 			justify-content: space-between
-			margin: 0 auto -30px
+			margin: 0 auto -24px
 			z-index: 100
 
 			.step
 				border: 2px solid white
 				font-size: 1rem
 				background: #CE0082
-				width: 60px
+				width: 50px
 				aspect-ratio: 1
 				display: flex
 				justify-content: center
@@ -170,7 +172,16 @@
 		display: flex
 		justify-content: center
 		align-items: center
-		padding: 1rem
+		padding: 3rem 1rem 1rem
+
+		.scroll-wrapper
+			position: absolute
+			top: 2rem
+			left: 0
+			width: 100%
+			height: calc(100% - 2rem)
+			overflow-y: auto
+			padding: 1rem
 
 	.app-footer
 		border-top: 1px solid var(--bs-border-color)
