@@ -5,6 +5,7 @@
 				<nuxt-link to="/"><img class="logo" src="/images/logo.png" alt="INE"></nuxt-link>
 			</div>
 		</header>
+
 		<div class="welcome-copy">
 			<div class="container">
 				<div class="copy">
@@ -13,7 +14,7 @@
 					<p>Solo sigue 3 sencillos pasos y podrás hacer valer tu voz.</p>
 				</div>
 
-				<div class="steps">
+				<div class="steps" :class="`steps-${ voting.inStep }`">
 					<nuxt-link to="/step1" class="step" :class="{ completed: voting.inStep > 1 }">
 						<span class="number">1</span>
 						<span class="icon">
@@ -62,20 +63,22 @@
 	watch(() => route.path, (path) => {
 		if(path === '/') {
 			voting.inStep = 0;
-		} if(path === 'thanks') {
-
-
-
+		} else if(path === '/thanks') {
+			voting.inStep = 4;
 		} else {
 			voting.inStep = parseInt(path.replace('/step', ''));
 		}
 	});
 
 	onMounted(() => {
-		if(route.path === '/') {
+		const path = route.path;
+
+		if(path === '/') {
 			voting.inStep = 0;
+		} else if(path === '/thanks') {
+			voting.inStep = 4;
 		} else {
-			voting.inStep = parseInt(route.path.replace('/step', ''));
+			voting.inStep = parseInt(path.replace('/step', ''));
 		}
 	});
 
@@ -132,6 +135,10 @@
 			justify-content: space-between
 			margin: 0 auto -24px
 			z-index: 100
+			transition: all 0.5s ease
+
+			&.steps-4
+				opacity: 0
 
 			.step
 				border: 2px solid white

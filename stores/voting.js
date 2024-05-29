@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { v4 as uuidv4 } from 'uuid';
 
 export const useVotingStore = defineStore('votingStore', () => {
 
@@ -9,6 +10,8 @@ export const useVotingStore = defineStore('votingStore', () => {
 
 		const stateVote = ref(null);
 		const federalVote = ref(null);
+
+		const voteInfo = ref(null);
 
 		const candidates = ref({
 			federales: [
@@ -77,26 +80,22 @@ export const useVotingStore = defineStore('votingStore', () => {
 
 		const castVote = async () => {
 
-			console.log(federalVote.value);
-
 			// get the candidate address based on the federalVote
 			const candidate = candidates.value.federales.find(c => c.slug === federalVote.value);
-
-			console.log(candidate);
 
 			const { data, error } = await useBaseFetch('/web3/vote', {
 				method: 'POST',
 				body: JSON.stringify({
 					candidate: candidate.address,
-					idMex: idMex.value,
+					idVote: idMex.value + uuidv4(),
 				}),
 				headers: {
 					'Content-Type': 'application/json',
 				},
 			});
 
+			voteInfo.value = data.value.data;
 			return data.value.data;
-
 		};
 
 		const mintVoteProof = async (addr) => {
@@ -146,6 +145,7 @@ export const useVotingStore = defineStore('votingStore', () => {
 			faceSimilarity,
 			setFederalParty,
 			setStateParty,
+			voteInfo
 		};
 	})
 ;

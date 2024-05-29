@@ -29,7 +29,7 @@
 		"nuxt-swiper": "^1.2.2",
 		"pluralize": "^8.0.0",
 		"recaptcha-bypass": "^1.0.0",
-		"uuid": "^9.0.0",
+		"uuid": "^9.0.1",
 		"vue": "^3.4.21",
 		"vue-awesome-paginate": "^1.1.46",
 		"vue-multiselect": "^3.0.0-beta.2",
