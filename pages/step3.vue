@@ -35,7 +35,7 @@
 			<p class="text-center text-muted fs-7 mb-1">He seleccionado a mi candidato y quiero emitir mi voto</p>
 
 			<p class="text-center">
-				<nuxt-link to="/step3" class="btn rounded-pill btn-start w-100 btn-primary">Emitir Voto</nuxt-link>
+				<nuxt-link @click="castVote()" class="btn rounded-pill btn-start w-100 btn-primary">Emitir Voto</nuxt-link>
 			</p>
 		</template>
 	</div>
@@ -43,9 +43,14 @@
 
 <script setup>
 	const voting = useVotingStore();
-
+  const router = useRouter();
 	const setVote = (party) => {
 		voting.party = party;
+	};
+
+	const castVote = async ()  => {
+		await voting.castVote()
+		router.push('/step3')
 	};
 
 </script>
