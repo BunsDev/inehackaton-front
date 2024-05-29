@@ -1,80 +1,86 @@
 <template>
 	<div class="step1-wrapper">
 
-		<div class="file-uploader-wrapper" v-if="!voting.ineBack || !voting.ineFront">
+		<div class="container">
+			<div class="file-uploader-wrapper" v-if="!voting.ineBack || !voting.ineFront">
 
-			<platform-loading :active="uploadLoading" :is-full-page="false" />
+				<platform-loading :active="uploadLoading" :is-full-page="false" />
 
-			<div class="step-copy">
-				<h2>Paso 1</h2>
-				<p>Carga tu credencial de elector aquí.</p>
-				<p>Por favor carga: una imagen de frente y una de trás de tu credencial o en su defecto, una imagen que contenga ambos lados.</p>
-			</div>
+				<div class="step-copy">
+					<h2>Paso 1</h2>
+					<p>Carga tu credencial de elector aquí.</p>
+					<p>Por favor carga: una imagen de frente y una de trás de tu credencial o en su defecto, una imagen que contenga ambos lados.</p>
+				</div>
 
-			<platform-file-upload
-				ref="fileUploadRef"
-				class="file-upload mb-2"
-				@update="uploadIne"
-				:multiple="false"
-				accept="image/jpeg,image/png"
-			>
-				<template #default>
-					<div class="face-rec">
-						<icon name="carbon:credentials" />
-						<p class="text-muted fs-7">
-							Por favor, carga tu credencial de elector aquí.
-						</p>
+				<platform-file-upload
+					ref="fileUploadRef"
+					class="file-upload mb-2"
+					@update="uploadIne"
+					:multiple="false"
+					accept="image/jpeg,image/png"
+				>
+					<template #default>
+						<div class="face-rec">
+							<icon name="carbon:credentials" />
+							<p class="text-muted fs-7">
+								Por favor, carga tu credencial de elector aquí.
+							</p>
+						</div>
+					</template>
+					<template #overlay>
+						<div class="drop-disclaimer">
+							<icon name="teenyicons:cup-outline" />
+							<p>Suélta el archivo de tu INE como si estuvieran bien caliente!</p>
+						</div>
+					</template>
+				</platform-file-upload>
+
+				<div class="row gx-2">
+					<div class="col-6">
+						<div class="side-verification side-front" :class="{ 'ready': !!voting.ineFront }">
+							<icon v-if="voting.ineFront" name="material-symbols:check-small-rounded" />
+							<icon
+								v-else
+								name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting"
+							/>
+							Frente
+						</div>
 					</div>
-				</template>
-				<template #overlay>
-					<div class="drop-disclaimer">
-						<icon name="teenyicons:cup-outline" />
-						<p>Suélta el archivo de tu INE como si estuvieran bien caliente!</p>
-					</div>
-				</template>
-			</platform-file-upload>
-
-			<div class="row gx-2">
-				<div class="col-6">
-					<div class="side-verification side-front" :class="{ 'ready': !!voting.ineFront }">
-						<icon v-if="voting.ineFront" name="material-symbols:check-small-rounded" />
-						<icon
-							v-else
-							name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting"
-						/>
-						Frente
+					<div class="col-6">
+						<div class="side-verification side-back" :class="{ 'ready': !!voting.ineBack }">
+							<icon v-if="voting.ineBack" name="material-symbols:check-small-rounded" />
+							<icon
+								v-else
+								name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting"
+							/>
+							Tras
+						</div>
 					</div>
 				</div>
-				<div class="col-6">
-					<div class="side-verification side-back" :class="{ 'ready': !!voting.ineBack }">
-						<icon v-if="voting.ineBack" name="material-symbols:check-small-rounded" />
-						<icon
-							v-else
-							name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting"
-						/>
-						Tras
-					</div>
+
+				<p class="text-center suggestions">
+					<a class="btn btn-suggestions btn-outline-primary w-100 rounded-pill">
+						<icon name="material-symbols:live-help-outline" />
+						Sugerencias para la mejor carga</a>
+				</p>
+			</div>
+
+			<div class="ine-uploaded" v-else>
+
+				<div class="ine">
+					<img :src="voting.ineFront" alt="INE" />
 				</div>
+
+				<p class="text-center mb-1">Listo, tu INE ha sido cargada exitosamente</p>
+				<p class="text-center"><code>{{ voting.idMex }}</code></p>
+				<p class="text-center">
+					<nuxt-link
+						to="/step2"
+						class="btn rounded-pill btn-start w-100 btn-primary"
+					>Siguiente paso
+					</nuxt-link>
+				</p>
 			</div>
-
-			<p class="text-center suggestions">
-				<a class="btn btn-suggestions btn-outline-primary w-100 rounded-pill">
-					<icon name="material-symbols:live-help-outline" />
-					Sugerencias para la mejor carga</a>
-			</p>
-		</div>
-
-		<div class="ine-uploaded" v-else>
-
-			<div class="ine">
-				<img :src="voting.ineFront" alt="INE" />
-			</div>
-
-			<p class="text-center mb-1">Listo, tu INE ha sido cargada exitosamente</p>
-			<p class="text-center"><code>{{ voting.idMex }}</code></p>
-			<p class="text-center">
-				<nuxt-link to="/step2" class="btn rounded-pill btn-start w-100 btn-primary">Siguiente paso</nuxt-link>
-			</p>
 		</div>
 
 	</div>
@@ -125,7 +131,7 @@
 						voting.ineFront = data.value.data;
 					}
 
-					if(credentialPhotoRes.data.value.data.documentType === 'ine_back') {
+					if(credentialPhotoRes.data.value.data.documentType.includes('ine_back')) {
 
 						// perform the ocr to find the idmex
 						const ocrRes = await useBaseFetch('/attachments/ocr', {
@@ -172,6 +178,8 @@
 
 	.ine-uploaded
 		width: 100%
+		max-width: 500px
+		margin: 0 auto
 
 		.ine
 			aspect-ratio: 16/9
@@ -213,6 +221,8 @@
 
 	.file-uploader-wrapper
 		width: 100%
+		max-width: 500px
+		margin: 0 auto
 
 		.file-upload
 			display: flex !important

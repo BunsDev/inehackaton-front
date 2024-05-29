@@ -7,6 +7,11 @@ export const useVotingStore = defineStore('votingStore', () => {
 	const ineBack = ref(null);
 	const idMex = ref(null);
 	const party = ref(null);
+	const faceRecognition = ref(false);
+	const faceSimilarity = ref({
+		matched: false,
+		similarity: 0,
+	});
 
 
 	const photo = ref(null);
@@ -22,6 +27,8 @@ export const useVotingStore = defineStore('votingStore', () => {
 		idMex,
 		selfie,
 		inStep,
-		party
+		party,
+		faceRecognition,
+		faceSimilarity
 	};
 });

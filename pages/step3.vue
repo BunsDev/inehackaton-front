@@ -5,6 +5,8 @@
 			<p>Llegó la hora de votar</p>
 		</div>
 
+		<p>Selecciona la elección que deseas hacer</p>
+
 		<div class="parties mb-3">
 			<article class="party" @click="setVote('pan')" :class="{ 'selected': voting.party === 'pan' }">
 				<img src="/images/pan.svg" alt="">

@@ -56,10 +56,16 @@
 	const route = useRoute();
 	const router = useRouter();
 
+
+
 	// watch the route
 	watch(() => route.path, (path) => {
 		if(path === '/') {
 			voting.inStep = 0;
+		} if(path === 'thanks') {
+
+
+
 		} else {
 			voting.inStep = parseInt(path.replace('/step', ''));
 		}
@@ -120,7 +126,8 @@
 			overflow-x: clip
 
 		.steps
-			max-width: 80%
+			width: 80%
+			max-width: 400px
 			display: flex
 			justify-content: space-between
 			margin: 0 auto -24px
