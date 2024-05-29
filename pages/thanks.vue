@@ -3,7 +3,7 @@
 
 		<div class="copy text-center">
 			<h2>Gracias</h2>
-			<h4>Por ser parte de nuestra democracias</h4>
+			<h4>Por ser parte de nuestra democracia.</h4>
 
 			<div class="voting-animation mb-4">
 				<img class="urn-front" src="/images/urna-front.svg" alt="">
