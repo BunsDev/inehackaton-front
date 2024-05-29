@@ -17,6 +17,7 @@
 					class="file-upload mb-2"
 					@update="uploadIne"
 					:multiple="false"
+					capture="user"
 					accept="image/jpeg,image/png"
 				>
 					<template #default>

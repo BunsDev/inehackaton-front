@@ -14,6 +14,7 @@
 				ref="fileUploadRef"
 				class="file-upload mb-4"
 				@update="uploadIne"
+				capture="user"
 				:multiple="false"
 				accept="image/jpeg,image/png"
 			>
