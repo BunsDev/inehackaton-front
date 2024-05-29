@@ -45,6 +45,8 @@
 
 	<footer class="app-footer">
 		<p class="mb-0 text-muted">Tu decisión es importante, VOTA.</p>
+
+		<img class="urn" src="/images/urna.svg" alt="">
 	</footer>
 </template>
 
@@ -185,6 +187,11 @@
 
 	.app-footer
 		border-top: 1px solid var(--bs-border-color)
-		text-align: center
 		padding: 1rem
+
+		.urn
+			position: absolute
+			width: 70px
+			right: 1rem
+			top: -1rem
 </style>

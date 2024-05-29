@@ -6,6 +6,7 @@ export const useVotingStore = defineStore('votingStore', () => {
 	const ineFront = ref(null);
 	const ineBack = ref(null);
 	const idMex = ref(null);
+	const party = ref(null);
 
 
 	const photo = ref(null);
@@ -21,5 +22,6 @@ export const useVotingStore = defineStore('votingStore', () => {
 		idMex,
 		selfie,
 		inStep,
+		party
 	};
 });
