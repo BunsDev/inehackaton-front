@@ -3,6 +3,10 @@ import { defineStore } from 'pinia';
 export const useVotingStore = defineStore('votingStore', () => {
 
 	const ine = ref(null);
+	const ineFront = ref(null);
+	const ineBack = ref(null);
+
+
 	const photo = ref(null);
 	const selfie = ref(null);
 
@@ -10,6 +14,8 @@ export const useVotingStore = defineStore('votingStore', () => {
 
 	return {
 		ine,
+		ineFront,
+		ineBack,
 		photo,
 		selfie,
 		inStep,

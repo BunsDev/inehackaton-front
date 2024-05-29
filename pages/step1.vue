@@ -3,14 +3,17 @@
 
 		<div class="file-uploader-wrapper" v-if="!voting.ine && true">
 
+			<platform-loading :active="uploadLoading" :is-full-page="false" />
+
 			<div class="step-copy">
 				<h2>Paso 1</h2>
 				<p>Carga tu credencial de elector aquí.</p>
+				<p>Por favor carga: una imagen de frente y una de trás de tu credencial o en su defecto, una imagen que contenga ambos lados.</p>
 			</div>
 
 			<platform-file-upload
 				ref="fileUploadRef"
-				class="file-upload mb-4"
+				class="file-upload mb-2"
 				@update="uploadIne"
 				:multiple="false"
 				accept="image/jpeg,image/png"
@@ -26,10 +29,27 @@
 				<template #overlay>
 					<div class="drop-disclaimer">
 						<icon name="teenyicons:cup-outline" />
-						<p>Suélta el archivo de tu ine como si estuvieran bien caliente!</p>
+						<p>Suélta el archivo de tu INE como si estuvieran bien caliente!</p>
 					</div>
 				</template>
 			</platform-file-upload>
+
+			<div class="row gx-2">
+				<div class="col-6">
+					<div class="side-verification side-front" :class="{ 'ready': !!voting.ineFront }">
+						<icon v-if="voting.ineFront" name="material-symbols:check-small-rounded" />
+						<icon v-else name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting" />
+						Frente
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="side-verification side-back" :class="{ 'ready': !!voting.ineBack }">
+						<icon v-if="voting.ineBack" name="material-symbols:check-small-rounded" />
+						<icon v-else name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting" />
+						Tras
+					</div>
+				</div>
+			</div>
 
 			<p class="text-center suggestions">
 				<a class="btn btn-suggestions btn-outline-primary w-100 rounded-pill">
@@ -75,21 +95,27 @@
 			const { data, error } = await useBaseFetch('/upload', {
 				method: 'POST',
 				body: formData,
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
 			});
 
 			if(data) {
-				voting.ine = data.value.data.attachment;
 
-				const credentialPhoto = await useBaseFetch('/attachments/credential-photo', {
+				const credentialPhoto = await useBaseFetch('/attachments/analyze', {
 					method: 'POST',
-					body: JSON.stringify(data.value.data.attachment),
+					body: JSON.stringify({ url: data.value.data }),
 				});
 
 				if(credentialPhoto.data.value) {
-					voting.photo.value = credentialPhoto.data.value.data.attachment;
+
+					// check it includes ine_front
+					if(credentialPhoto.data.value.data.documentType.includes('ine_front')) {
+						voting.ineFront = data.value.data;
+					}
+
+					if (credentialPhoto.data.value.data.documentType === 'ine_back') {
+						voting.ineBack = data.value.data;
+					}
+
+					console.log('credentialPhoto', credentialPhoto.data.value.data.documentType);
 				}
 			}
 		}
@@ -101,6 +127,25 @@
 
 <!--suppress SassScssResolvedByNameOnly -->
 <style lang="sass" scoped>
+
+	.side-verification
+		border: 1px solid var(--bs-border-color)
+		padding: 0.5rem
+		text-align: center
+		margin-bottom: 1rem
+
+		&.ready
+			background: var(--bs-success)
+			color: white
+
+		&.side-front
+			border-radius: 0 0 0 0.5rem
+
+		&.side-back
+			border-radius: 0 0 0.5rem 0
+
+		.icon
+			font-size: 1rem
 
 	.ine-uploaded
 		width: 100%
@@ -141,12 +186,12 @@
 		width: 100%
 
 		.file-upload
-			aspect-ratio: 1.2
 			display: flex !important
 			justify-content: center
 			align-items: center
-			border-radius: 1rem
+			border-radius: 1rem 1rem 0 0
 			overflow: hidden
+			height: 200px
 
 		:deep(.file-overlay)
 			position: absolute
@@ -167,10 +212,12 @@
 			align-items: center
 			gap: 1rem
 			pointer-events: none
+			text-align: center
+			padding: 1rem
 
 			.icon
-				width: 100px
-				height: 100px
+				width: 50px
+				height: 50px
 
 		:deep(.drop-zone)
 			display: flex
@@ -179,7 +226,7 @@
 			justify-content: center
 			gap: 1rem
 			padding: 1rem
-			border-radius: 1rem
+			border-radius: 1rem 1rem 0 0
 			border: 2px dashed var(--bs-border-color)
 			width: 100%
 			height: 100%
@@ -190,8 +237,8 @@
 			margin: 0 auto
 
 			.icon
-				width: 100px
-				height: 100px
+				width: 50px
+				height: 50px
 				color: $brand1
 
 			h2
