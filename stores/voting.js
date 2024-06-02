@@ -7,6 +7,7 @@ export const useVotingStore = defineStore('votingStore', () => {
 		const ineFront = ref(null);
 		const ineBack = ref(null);
 		const idMex = ref(null);
+		const idMexTx = ref(null);
 
 		const stateVote = ref(null);
 		const federalVote = ref(null);

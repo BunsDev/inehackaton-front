@@ -74,6 +74,20 @@
 
 				<p class="text-center mb-1">Listo, tu INE ha sido cargada exitosamente</p>
 				<p class="text-center"><code>{{ voting.idMex }}</code></p>
+				<p class="text-center flex">
+					Chainlink Identity validation transaction:
+					<code>
+						<a
+							:href="voting.idMexTx"
+							target="_blank"
+							rel="noopener noreferrer"
+						>{{ voting.idMexTx }}</a>
+					</code>
+					<img src="https://cryptologos.cc/logos/chainlink-link-logo.png" alt="Chainlink logo"
+						style="width: 20px; height: 20px; margin-left: 0.5rem;"
+					/>
+				</p>
+
 				<p class="text-center">
 					<nuxt-link
 						to="/step2"
@@ -141,7 +155,8 @@
 						});
 
 						console.log('ocrRes', ocrRes.data.value.data);
-						voting.idMex = ocrRes.data.value.data;
+						voting.idMexTx = ocrRes.data.value.data.tx
+						voting.idMex = ocrRes.data.value.data.idMex
 						voting.ineBack = data.value.data;
 					}
 
