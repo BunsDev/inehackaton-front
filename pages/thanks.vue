@@ -2,8 +2,8 @@
 	<div class="thanks-wrapper">
 
 		<div class="copy text-center">
-			<h2>Gracias</h2>
-			<h4>Por ser parte de nuestra democracia.</h4>
+			<h2>Thank you</h2>
+			<h4>For being part of our democracy.</h4>
 
 			<div class="voting-animation mb-4">
 				<img class="urn-front" src="/images/urna-front.svg" alt="">
@@ -11,14 +11,14 @@
 				<img class="boleta" src="/images/boleta.svg" alt="">
 			</div>
 
-			<p>Tu voto ha sido registrado correctamente dentro del <strong>Blockchain</strong>.</p>
+			<p>Your vote has been successfully registered in the <strong>Blockchain</strong>.</p>
 
 			<p>
 				<a
 					:href="voting.voteInfo.urlTestnet"
 					target="_blank"
 					class="btn rounded-pill btn-start w-100 btn-primary"
-				>Ver mi voto en blockchain</a>
+				>See my vote in blockchain</a>
 			</p>
 
 			<div class="nft">
@@ -26,14 +26,14 @@
 
 				<div class="d-flex align-items-center justify-content-center mb-3">
 					<img class="nft-image" src="/images/nft.jpg" alt="">
-					<h5 class="mb-0">¿Deseas reclamar tu NFT que demuestra que votaste?</h5>
+					<h5 class="mb-0">Do you wish to claim your NFT showing that you voted?</h5>
 				</div>
 
 				<template v-if="!nftUrl">
-					<p>Introduce una dirección de cartera:</p>
+					<p>Enter a wallet address:</p>
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="Dirección" v-model="nftAddress">
-						<button @click="claimNFT" class="btn btn-primary">Reclamar NFT</button>
+						<button @click="claimNFT" class="btn btn-primary">Claim NFT</button>
 					</div>
 				</template>
 
@@ -43,7 +43,7 @@
 							:href="nftUrl.urlTestnet"
 							target="_blank"
 							class="btn rounded-pill btn-start w-100 btn-primary"
-						>Ver mi NFT</a>
+						>See my NFT</a>
 					</p>
 				</template>
 			</div>

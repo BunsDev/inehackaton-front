@@ -7,9 +7,9 @@
 				<platform-loading :active="uploadLoading" :is-full-page="false" />
 
 				<div class="step-copy">
-					<h2>Paso 1</h2>
-					<p>Carga tu credencial de elector aquí.</p>
-					<p>Por favor carga: una imagen de frente y una de trás de tu credencial o en su defecto, una imagen que contenga ambos lados.</p>
+					<h2>Step 1</h2>
+					<p>Upload your voter's credential here.</p>
+					<p>Please upload: one image of the front and one of the back of your credential or, failing that, an image containing both sides.</p>
 				</div>
 
 				<platform-file-upload
@@ -24,14 +24,14 @@
 						<div class="face-rec">
 							<icon name="carbon:credentials" />
 							<p class="text-muted fs-7">
-								Por favor, carga tu credencial de elector aquí.
+								Please upload your voter identification card here.
 							</p>
 						</div>
 					</template>
 					<template #overlay>
 						<div class="drop-disclaimer">
 							<icon name="teenyicons:cup-outline" />
-							<p>Suélta el archivo de tu INE como si estuvieran bien caliente!</p>
+							<p>Release your INE file as if they were really hot!</p>
 						</div>
 					</template>
 				</platform-file-upload>
@@ -44,7 +44,7 @@
 								v-else
 								name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting"
 							/>
-							Frente
+							Front
 						</div>
 					</div>
 					<div class="col-6">
@@ -54,7 +54,7 @@
 								v-else
 								name="streamline:interface-page-controller-loading-1-progress-loading-load-wait-waiting"
 							/>
-							Tras
+							Back
 						</div>
 					</div>
 				</div>
@@ -62,7 +62,7 @@
 				<p class="text-center suggestions">
 					<a class="btn btn-suggestions btn-outline-primary w-100 rounded-pill">
 						<icon name="material-symbols:live-help-outline" />
-						Sugerencias para la mejor carga</a>
+						Suggestions for the best loading</a>
 				</p>
 			</div>
 
@@ -72,7 +72,7 @@
 					<img :src="voting.ineFront" alt="INE" />
 				</div>
 
-				<p class="text-center mb-1">Listo, tu INE ha sido cargada exitosamente</p>
+				<p class="text-center mb-1">Done, your INE has been successfully uploaded.</p>
 				<p class="text-center"><code>{{ voting.idMex }}</code></p>
 				<p class="text-center flex">
 					Chainlink Identity validation transaction:
@@ -92,7 +92,7 @@
 					<nuxt-link
 						to="/step2"
 						class="btn rounded-pill btn-start w-100 btn-primary"
-					>Siguiente paso
+					>Next Step
 					</nuxt-link>
 				</p>
 			</div>

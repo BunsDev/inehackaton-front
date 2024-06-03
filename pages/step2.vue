@@ -6,8 +6,8 @@
 			<img class="face-scan-animation" src="/images/face-scan.gif" alt="" :class="{ active: uploadLoading }">
 
 			<div class="step-copy">
-				<h2>Paso 2</h2>
-				<p>Tómate una selfie</p>
+				<h2>Step 2</h2>
+				<p>Take a selfie</p>
 			</div>
 
 			<platform-file-upload
@@ -22,14 +22,14 @@
 					<div class="face-rec">
 						<icon name="material-symbols:android-camera-outline" />
 						<p class="text-muted fs-7">
-							Por favor, tómate una selfie aquí.
+							Please take a selfie here.
 						</p>
 					</div>
 				</template>
 				<template #overlay>
 					<div class="drop-disclaimer">
 						<icon name="teenyicons:cup-outline" />
-						<p>Suélta el archivo de tu ine como si estuvieran bien caliente!</p>
+						<p>Release the file of your ine as if they were very hot!</p>
 					</div>
 				</template>
 			</platform-file-upload>
@@ -37,7 +37,7 @@
 			<p class="text-center suggestions">
 				<a class="btn btn-suggestions btn-outline-primary w-100 rounded-pill">
 					<icon name="material-symbols:live-help-outline" />
-					Sugerencias para la mejor carga</a>
+					Suggestions for the best loading</a>
 			</p>
 		</div>
 
@@ -49,8 +49,8 @@
 				</div>
 
 				<div class="error-copy text-center">
-					<h4>Hay un problema con tu fotografía</h4>
-					<p>Parece que no pudimos identificar tu fotografía contra tu credencial de elector. Por favor intenta de nuevo.</p>
+					<h4>There is a problem with your photograph</h4>
+					<p>It looks like we were unable to identify your photo against your voter ID. Please try again.</p>
 				</div>
 
 				<p class="text-center">
@@ -58,7 +58,7 @@
 						href="#"
 						@click.prevent="retry"
 						class="btn rounded-pill btn-start w-100 btn-primary"
-					>Intentar de nuevo</a>
+					>Try again</a>
 				</p>
 			</template>
 
@@ -68,12 +68,27 @@
 				</div>
 				<div class="success-copy text-center">
 
-					<h4>Identidad confirmada</h4>
-					<p>¡Gracias! Listo para votar</p>
+					<h4>Identity confirmed</h4>
+					<p>Thank you! Ready to vote</p>
 				</div>
 				<p class="text-center">
-					<nuxt-link to="/step3" class="btn rounded-pill btn-start w-100 btn-primary">¡A votar!</nuxt-link>
+					<nuxt-link to="/step3" class="btn rounded-pill btn-start w-100 btn-primary">Let's vote!</nuxt-link>
 				</p>
+
+				<p class="text-center flex">
+					Chainlink Identity validation transaction:
+					<code>
+						<a
+							:href="voting.faceSimilarity.tx"
+							target="_blank"
+							rel="noopener noreferrer"
+						>{{ voting.faceSimilarity.tx }}</a>
+					</code>
+					<img src="https://cryptologos.cc/logos/chainlink-link-logo.png" alt="Chainlink logo"
+						style="width: 20px; height: 20px; margin-left: 0.5rem;"
+					/>
+				</p>
+
 			</template>
 		</div>
 
@@ -107,7 +122,7 @@
 			if(data) {
 				voting.selfie = data.value.data;
 
-				const faceRecognitionRes = await useBaseFetch('/attachments/compare-faces', {
+				const faceRecognitionRes = await useBaseFetch('/attachments/recognition', {
 					method: 'POST',
 					body: JSON.stringify({
 						url1: voting.ineFront,

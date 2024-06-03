@@ -84,11 +84,21 @@ export const useVotingStore = defineStore('votingStore', () => {
 			// get the candidate address based on the federalVote
 			const candidate = candidates.value.federales.find(c => c.slug === federalVote.value);
 
+			// generate a key unique to the current hour
+			// this key will be used to encrypt the vote
+
+			// get date in ymd format
+			const date = new Date();
+			const ymd = date.toISOString().split('T')[0].replace(/-/g, '');
+
+			// get the current hour
+			const hour = date.getHours();
+
 			const { data, error } = await useBaseFetch('/web3/vote', {
 				method: 'POST',
 				body: JSON.stringify({
 					candidate: candidate.address,
-					idVote: idMex.value
+					idVote: idMex.value + ymd + hour,
 				}),
 				headers: {
 					'Content-Type': 'application/json',

@@ -3,17 +3,17 @@
 
 		<div class="vote-error" :class="{ 'voted': !!voteError }">
 			<icon name="material-symbols:error-rounded" />
-			<h4>Lo sentimos, este ciudadano ya está registrado con su voto.</h4>
+			<h4>Sorry, this citizen is already registered with their vote.</h4>
 		</div>
 
 		<div class="voting-wrapper" :class="{ 'voted': !!voted }">
 			<div class="step-copy">
-				<h2>Paso 3</h2>
-				<p>¡Llegó la hora de votar!</p>
+				<h2>Step 3</h2>
+				<p>It's time to vote!</p>
 			</div>
 
 			<div class="mb-3">
-				<p class="mb-1 text-center">Selecciona la elección que deseas hacer:</p>
+				<p class="mb-1 text-center">Select the choice you wish to make:</p>
 				<!-- pill tabs for "Estatales" and "Federales" -->
 				<div class="d-flex">
 					<div class="btn-group flex-grow-1" role="group">
@@ -21,13 +21,13 @@
 							class="btn"
 							:class="{ 'btn-primary': mode === 'federales', 'btn-outline-primary': mode !== 'federales' }"
 							@click="mode = 'federales'"
-						>Federales
+						>Federal
 						</button>
 						<button
 							class="btn"
 							:class="{ 'btn-primary': mode === 'estatales', 'btn-outline-primary': mode !== 'estatales' }"
 							@click="mode = 'estatales'"
-						>Estatales
+						>State
 						</button>
 					</div>
 				</div>
@@ -68,13 +68,13 @@
 			</div>
 
 			<template v-if="!!voting.federalVote && !!voting.stateVote">
-				<p class="text-center text-muted fs-7 mb-1">He seleccionado a mis candidato y quiero emitir mi voto</p>
+				<p class="text-center text-muted fs-7 mb-1">I have selected my candidates and I want to cast my vote.</p>
 
 				<p class="text-center">
 					<nuxt-link
 						@click="castVote"
 						class="btn rounded-pill btn-start w-100 btn-primary"
-					>Emitir Voto
+					>Cast Vote
 					</nuxt-link>
 				</p>
 			</template>
@@ -86,8 +86,8 @@
 			</div>
 
 			<div class="copy text-center">
-				<h3>¡Estás haciendo historia!</h3>
-				<p class="text-muted">Tu voto está siendo procesado</p>
+				<h3>You are making history!</h3>
+				<p class="text-muted">Your vote is being processed</p>
 				<loader-quantum />
 			</div>
 		</div>

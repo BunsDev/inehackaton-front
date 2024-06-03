@@ -9,9 +9,9 @@
 		<div class="welcome-copy">
 			<div class="container">
 				<div class="copy">
-					<h2>Bienvenido al Sistema de Votación Digital Mexicano</h2>
-					<h3>¡Tu voto más fácil que nunca!</h3>
-					<p>Solo sigue 3 sencillos pasos y podrás hacer valer tu voz.</p>
+					<h2>Welcome to the Mexican Digital Voting System</h2>
+					<h3>Your vote is easier than ever!</h3>
+					<p>Just follow 3 simple steps and you will be able to make your voice heard.</p>
 				</div>
 
 				<div class="steps" :class="`steps-${ voting.inStep }`">
@@ -45,7 +45,7 @@
 	</div>
 
 	<footer class="app-footer">
-		<p class="mb-0 text-muted">Tu decisión es importante, VOTA.</p>
+		<p class="mb-0 text-muted">Your decision is important, VOTE.</p>
 
 		<img class="urn" src="/images/urna.svg" alt="">
 	</footer>
